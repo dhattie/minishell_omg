@@ -1,6 +1,3 @@
-//
-// Created by user on 12.02.2022.
-//
 
 #include "../include/minishell.h"
 
@@ -101,7 +98,6 @@ void	shell_executor(t_shell *minishell)
         minishell->apps = minishell->apps->next;
     }
 }
-
 
 void	minishell_scheduler(t_shell *minishell)
 {

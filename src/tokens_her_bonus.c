@@ -15,13 +15,18 @@ int	handle_or(t_shell *minishell, int *i)
     ++(*i);
     minishell->apps->token = TOKEN_OR;
     add_application(minishell);
-    while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
-                                         || minishell->input[*i + 1] == '\t'))
+	while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
+    	|| minishell->input[*i + 1] == '\t'))
         ++(*i);
-    if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
-        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
-        || minishell->input[*i + 1] == '&')
-        return (syntax_error(minishell, minishell->input + *i + 1, 1));
+//изменение №1
+	  if (ft_strchr("0|<>&", (int)minishell->input[*i + 1]))
+		  return (syntax_error(minishell, minishell->input + *i + 1, 1));
+// было изначально
+//	if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
+//        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
+//        || minishell->input[*i + 1] == '&')
+//        return (syntax_error(minishell, minishell->input + *i + 1, 1));
+
     if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
         ret = ft_strdup(minishell->input + *i + 1);
     (*i) = -1;

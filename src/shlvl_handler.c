@@ -11,25 +11,40 @@ void	check_shlvl(t_shell *minishell)
     int		shlvl;
 
     tmp = minishell->environment;
-    while (1)
-    {
-        if (!tmp)
-        {
-            ft_lstadd_back_minishell(&minishell->environment,
-            ft_lstnew_minishell(ft_strdup("SHLVL"), ft_strdup("1")));
-            break ;
-        }
-        else if (!(ft_strcmp(tmp->key, "SHLVL")))
-        {
-            shlvl = ft_atoi(tmp->value);
-            if (tmp->value != NULL)
-                free(tmp->value);
-            if (shlvl < 0)
-                tmp->value = ft_strdup("0");
-            else
-                tmp->value = ft_itoa(shlvl + 1);
-            break ;
-        }
-        tmp = tmp->next;
-    }
+	while (tmp)
+	{
+		if (!(ft_strcmp(tmp->key, "SHLVL")))
+		{
+			shlvl = ft_atoi(tmp->value);
+			free(tmp->value);
+			tmp->value = ft_itoa(shlvl + 1);
+			break ;
+		}
+		tmp = tmp->next;
+	}
+
+//    while (1)
+//    {
+//        /** не излишни ли эта штука??? */
+//		if (!tmp)
+//        {
+//			printf("aaaaaa\n");
+//			ft_lstadd_back_minishell(&minishell->environment,
+//            ft_lstnew_minishell(ft_strdup("SHLVL"), ft_strdup("1")));
+//            break ;
+//        }
+//		/** для чего делать еще эту проверку?*/
+//        else if (!(ft_strcmp(tmp->key, "SHLVL")))
+//        {
+//            shlvl = ft_atoi(tmp->value);
+//            if (tmp->value != NULL)
+//                free(tmp->value);
+//            if (shlvl < 0)
+//                tmp->value = ft_strdup("0");
+//            else
+//                tmp->value = ft_itoa(shlvl + 1);
+//            break ;
+//        }
+//        tmp = tmp->next;
+//    }
 }

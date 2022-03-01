@@ -127,3 +127,21 @@ void	ft_putstr(char *a)
 		i++;
 	}
 }
+
+void skip_space_tab(t_shell *minishell, int *i)
+{
+	while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
+		|| minishell->input[*i + 1] == '\t'))
+		++(*i);
+}
+
+char *check_for_data(t_shell *minishell, int i)
+{
+	char *ret;
+
+	if (minishell->input[i] != 0 && minishell->input[i + 1] != 0)
+		ret = ft_strdup(minishell->input + i + 1);
+	else
+		ret = NULL;
+	return (ret);
+}

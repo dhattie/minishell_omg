@@ -1,6 +1,4 @@
-//
-// Created by user on 10.02.2022.
-//
+
 
 #include "../include/minishell.h"
 
@@ -17,6 +15,23 @@ void	ft_lstadd_back_minishell(t_envp **lst, t_envp *new)
     new->prev = tmp;
     tmp->next = new;
 }
+
+void	ft_lstclear_minishell(t_envp **lst)
+{
+	t_envp	*tmp;
+
+	tmp = NULL;
+	if (!*lst)
+		return ;
+	while (*lst)
+	{
+		tmp = *lst;
+		*lst = (*lst)->next;
+		free(tmp);
+	}
+}
+
+
 
 t_envp	*ft_lstlast_minishell(t_envp *lst)
 {

@@ -6,6 +6,7 @@
 
 void	base_signal(void)
 {
+	signal(SIGTSTP, SIG_IGN);
     signal(SIGTERM, SIG_IGN);
     signal(SIGINT, cntrl_c);
     signal(SIGQUIT, SIG_IGN);

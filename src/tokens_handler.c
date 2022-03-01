@@ -8,20 +8,31 @@ int	handle_pipe(t_shell *minishell, int *i)
 {
     char	*ret;
 
-    ret = NULL;
+	//изменения №5
+    //ret = NULL;
     if (*i != 0)
         expand_argv(minishell, i);
     minishell->apps->token = IS_PIPE;
     add_application(minishell);
-    while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
-                                         || minishell->input[*i + 1] == '\t'))
-        ++(*i);
-    if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
-        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
-        || minishell->input[*i + 1] == '&')
-        return (syntax_error(minishell, minishell->input + *i + 1, 1));
-    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
-        ret = ft_strdup(minishell->input + *i + 1);
+
+	skip_space_tab(minishell, i);
+//изменения 2
+//    while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
+//    	|| minishell->input[*i + 1] == '\t'))
+//        ++(*i);
+// Изменения №1
+	if (ft_strchr("0|<>&", (int)minishell->input[*i + 1]))
+		return (syntax_error(minishell, minishell->input + *i + 1, 1));
+// Было изначально
+//    if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
+//        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
+//        || minishell->input[*i + 1] == '&')
+//        return (syntax_error(minishell, minishell->input + *i + 1, 1));
+// изменения №3
+//    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
+//        ret = ft_strdup(minishell->input + *i + 1);
+	ret = check_for_data(minishell, *i);
+
     (*i) = -1;
     free(minishell->input);
     minishell->input = ret;
@@ -33,19 +44,27 @@ int	redirect_output(t_shell *minishell, int *i)
 {
     char	*ret;
 
-    ret = NULL;
+   // ret = NULL;
     if (*i != 0)
         expand_argv(minishell, i);
     minishell->apps->token = TOKEN_REDIRECT_OUTPUT;
-    while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
-                                         || minishell->input[*i + 1] == '\t'))
-        ++(*i);
-    if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
-        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
-        || minishell->input[*i + 1] == '&')
-        return (syntax_error(minishell, minishell->input + *i + 1, 1));
-    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
-        ret = ft_strdup(minishell->input + *i + 1);
+
+	skip_space_tab(minishell, i);
+//	while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
+//                                         || minishell->input[*i + 1] == '\t'))
+//        ++(*i);
+
+	if (ft_strchr("0|<>&", (int)minishell->input[*i + 1]))
+		return (syntax_error(minishell, minishell->input + *i + 1, 1));
+
+//    if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
+//        || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
+//        || minishell->input[*i + 1] == '&')
+//        return (syntax_error(minishell, minishell->input + *i + 1, 1));
+	ret = check_for_data(minishell, *i);
+
+//    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
+//        ret = ft_strdup(minishell->input + *i + 1);
     (*i) = -1;
     free(minishell->input);
     minishell->input = ret;
@@ -64,6 +83,7 @@ int	redirect_output_append(t_shell *minishell, int *i)
     while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
                                          || minishell->input[*i + 1] == '\t'))
         ++(*i);
+	
     if (minishell->input[*i + 1] == 0 || minishell->input[*i + 1] == '|'
         || minishell->input[*i + 1] == '<' || minishell->input[*i + 1] == '>'
         || minishell->input[*i + 1] == '&')
@@ -100,7 +120,7 @@ int	redirect_input(t_shell *minishell, int *i)
 
 int	tokens_handler(t_shell *minishell, int *i)
 {
-    if (minishell->input[*i] == '|')
+	if (minishell->input[*i] == '|')
     {
         if (minishell->input[*i + 1] == '|')
             return (handle_or(minishell, i));

@@ -1,8 +1,7 @@
-//
-// Created by Dayna Hattie on 2/19/22.
-//
+
 
 #include "../include/minishell.h"
+
 
 
 int	syntax_error(t_shell *minishell, const char *token, int len)

@@ -118,7 +118,7 @@ int	split_input(t_shell *minishell, int *i)
     ret = NULL;
     expand_argv(minishell, i);
     while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
-                                         || minishell->input[*i + 1] == '\t'))
+    	|| minishell->input[*i + 1] == '\t'))
         ++(*i);
     if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
         ret = ft_strdup(minishell->input + *i + 1);

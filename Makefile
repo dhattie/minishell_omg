@@ -7,7 +7,8 @@ SRC    :=	minishell.c quotes_handler.c dollar_handler.c \
 			minishell_export.c minishell_cd.c minishell_cd_u.c \
 			minishell_echo.c errors_handler.c minishell_pwd.c lst_functions.c \
 			minishell_env.c shlvl_handler.c minishell_signals.c \
-			split_into_asterisk.c split_into_asterisk_u.c ft_split_once.c
+			split_into_asterisk.c split_into_asterisk_u.c ft_split_once.c \
+			parser.c
 
 OBJ    :=	$(SRC:.c=.o)
 HDR    :=	minishell.h
@@ -19,12 +20,12 @@ all:		$(NAME)
 
 $(NAME):	$(OBJ)
 			$(MAKE) -C libft
-			$(CC) $(CFLAGS) -Llibft -lft -lreadline -L/Users/${USER}/.brew/Cellar/readline/8.1/lib/ -ltermcap $(OBJ) -o $(NAME)
+			$(CC) $(CFLAGS) -Llibft -lft -lreadline -L/Users/${USER}/.brew/Cellar/readline/8.1.2/lib/ -ltermcap $(OBJ) -o $(NAME)
 
 bonus:
 
 %.o: %.c
-			$(CC) $(CFLAGS) -Iinclude -Ilibft -I/Users/${USER}/.brew/Cellar/readline/8.1/include -c $< -o $@
+			$(CC) $(CFLAGS) -Iinclude -Ilibft -I/Users/${USER}/.brew/Cellar/readline/8.1.2/include -c $< -o $@
 
 include		$(wildcard *.d)
 

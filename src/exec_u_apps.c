@@ -1,6 +1,4 @@
-//
-// Created by user on 12.02.2022.
-//
+
 
 #include "../include/minishell.h"
 
