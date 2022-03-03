@@ -4,25 +4,34 @@
 
 #include "../include/minishell.h"
 
+
+void	file_free(t_shell *minishell)
+{
+	close(minishell->apps->fd_output_file);
+	free(minishell->apps->output_file);
+	minishell->apps->output_file = NULL;
+}
+
 int	split_into_output_file(t_shell *minishell, int *i)
 {
     if (minishell->apps->do_not_launch == 0)
     {
         if (minishell->apps->output_file != NULL)
-        {
-            close(minishell->apps->fd_output_file);
-            free(minishell->apps->output_file);
-            minishell->apps->output_file = NULL;
-        }
+			file_free(minishell);
+//		{
+//            close(minishell->apps->fd_output_file);
+//            free(minishell->apps->output_file);
+//            minishell->apps->output_file = NULL;
+//        }
         minishell->apps->output_file = ft_substr(minishell->input, 0, *i);
         if (minishell->apps->output_file == NULL)
             standard_error(minishell, NULL);
         if (minishell->apps->token == TOKEN_REDIRECT_OUTPUT)
             minishell->apps->fd_output_file = open(minishell->apps->output_file,
-                                                   O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                O_WRONLY | O_CREAT | O_TRUNC, 0644);
         else
             minishell->apps->fd_output_file = open(minishell->apps->output_file,
-                                                   O_RDWR | O_CREAT | O_APPEND, 0644);
+                O_RDWR | O_CREAT | O_APPEND, 0644);
         if (minishell->apps->fd_output_file == -1)
             standard_error(minishell, minishell->apps->output_file);
     }
@@ -35,11 +44,12 @@ int	split_into_input_file(t_shell *minishell, int *i)
     if (minishell->apps->do_not_launch == 0)
     {
         if (minishell->apps->input_file != NULL)
-        {
-            close(minishell->apps->fd_input_file);
-            free(minishell->apps->input_file);
-            minishell->apps->input_file = NULL;
-        }
+			file_free(minishell);
+//		{
+//            close(minishell->apps->fd_input_file);
+//            free(minishell->apps->input_file);
+//            minishell->apps->input_file = NULL;
+//        }
         minishell->apps->input_file = ft_substr(minishell->input, 0, *i);
         if (minishell->apps->input_file == NULL)
             standard_error(minishell, NULL);
@@ -63,7 +73,7 @@ int	split_into_heredoc(t_shell *minishell, int *i)
         standard_error(minishell, NULL);
     while (1)
     {
-        eof = readline("> ");
+        eof = readline("heredoc> ");
         if (!eof)
             break ;
         if (!ft_strcmp(minishell->apps->heredoc, eof))
@@ -117,11 +127,17 @@ int	split_input(t_shell *minishell, int *i)
 
     ret = NULL;
     expand_argv(minishell, i);
-    while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
-    	|| minishell->input[*i + 1] == '\t'))
-        ++(*i);
-    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
-        ret = ft_strdup(minishell->input + *i + 1);
+
+	skip_space_tab(minishell, i);
+// изменения 1
+//	while (minishell->input[*i] != 0 && (minishell->input[*i + 1] == ' '
+//    	|| minishell->input[*i + 1] == '\t'))
+//        ++(*i);
+
+// изменения 2
+	ret = check_for_data(minishell, *i);
+//    if (minishell->input[*i] != 0 && minishell->input[*i + 1] != 0)
+//        ret = ft_strdup(minishell->input + *i + 1);
     (*i) = -1;
     free(minishell->input);
     minishell->input = ret;

@@ -48,7 +48,7 @@ int	builtin_exec(t_shell *minishell)
 int	minishell_pre_executor(t_shell *minishell)
 {
     if (minishell->apps->token == IS_PIPE)
-        if (pipe(minishell->apps->fd))
+        if (pipe(minishell->apps->fd))   //возвращает -1, меняй условие
             return (runtime_error(minishell, NULL));
     if (minishell->apps->output_file != NULL)
         if (dup2(minishell->apps->fd_output_file, 1) == -1)

@@ -4,7 +4,6 @@
 
 #include "../include/minishell.h"
 
-
 void	garbage_collector2(t_shell *minishell)
 {
 	if (minishell->input != NULL)

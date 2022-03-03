@@ -31,8 +31,6 @@ void	ft_lstclear_minishell(t_envp **lst)
 	}
 }
 
-
-
 t_envp	*ft_lstlast_minishell(t_envp *lst)
 {
     t_envp	*tmp;

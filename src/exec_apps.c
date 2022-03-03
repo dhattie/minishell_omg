@@ -2,6 +2,15 @@
 #include "../include/minishell.h"
 
 
+void	minishell_scheduler(t_shell *minishell)
+{
+	source_fd_replacer(minishell, 0);
+	shell_executor(minishell);
+	signal(SIGINT, cntrl_c);
+	source_fd_replacer(minishell, 1);
+}
+
+
 int	source_fd_replacer(t_shell *minishell, int switcher)
 {
     if (switcher == 0)
@@ -17,6 +26,35 @@ int	source_fd_replacer(t_shell *minishell, int switcher)
         close(minishell->fd2_source);
     }
     return (0);
+}
+
+void	shell_executor(t_shell *minishell)
+{
+	minishell->apps = minishell->apps->head;
+	while (1)
+	{
+		if (minishell_pre_executor(minishell))
+			break ;
+		signal(SIGINT, cntrl_c2);
+		if (minishell->launch_method == IS_PIPE && minishell->apps->argv)
+		{
+			if (minishell_executor_pipe(minishell))
+				break ;
+		}
+		else if (minishell->apps->argv)
+		{
+			if (minishell_executor_no_pipe(minishell))
+				break ;
+		}
+		minishell_post_executor(minishell);
+		if (minishell->apps->next == NULL
+			|| (minishell->apps->token == TOKEN_OR
+				&& minishell->child_exit_status == 0)
+			|| (minishell->apps->token == TOKEN_AND
+				&& minishell->child_exit_status != 0))
+			break ;
+		minishell->apps = minishell->apps->next;
+	}
 }
 
 int	minishell_executor_pipe(t_shell *minishell)
@@ -70,39 +108,3 @@ int	minishell_executor_no_pipe(t_shell *minishell)
     return (0);
 }
 
-void	shell_executor(t_shell *minishell)
-{
-    minishell->apps = minishell->apps->head;
-    while (1)
-    {
-        if (minishell_pre_executor(minishell))
-            break ;
-        signal(SIGINT, cntrl_c2);
-        if (minishell->launch_method == IS_PIPE && minishell->apps->argv)
-        {
-            if (minishell_executor_pipe(minishell))
-                break ;
-        }
-        else if (minishell->apps->argv)
-        {
-            if (minishell_executor_no_pipe(minishell))
-                break ;
-        }
-        minishell_post_executor(minishell);
-        if (minishell->apps->next == NULL
-            || (minishell->apps->token == TOKEN_OR
-                && minishell->child_exit_status == 0)
-            || (minishell->apps->token == TOKEN_AND
-                && minishell->child_exit_status != 0))
-            break ;
-        minishell->apps = minishell->apps->next;
-    }
-}
-
-void	minishell_scheduler(t_shell *minishell)
-{
-    source_fd_replacer(minishell, 0);
-    shell_executor(minishell);
-    signal(SIGINT, cntrl_c);
-    source_fd_replacer(minishell, 1);
-}

@@ -115,6 +115,7 @@ int	minishell_executor_no_pipe(t_shell *minishell); // it wil bee static functio
 void	garbage_collector2(t_shell *minishell);
 void	garbage_collector(t_shell *minishell);
 
+
 /** app_handler.c */
 void	add_application(t_shell *minishell); /** change code */
 t_prog	*new_application(void);
@@ -218,7 +219,8 @@ int	split_into_output_file(t_shell *minishell, int *i); // it wil bee static fun
 int	split_into_input_file(t_shell *minishell, int *i); // it wil bee static function
 int	split_into_heredoc(t_shell *minishell, int *i); // it wil bee static function
 void	expand_argv(t_shell *minishell, int *i);
-int	split_input(t_shell *minishell, int *i);
+int		split_input(t_shell *minishell, int *i);
+void	file_free(t_shell *minishell); // my  fuction
 
 
 /** tokkens_handler.c */
@@ -259,9 +261,7 @@ int	runtime_error(t_shell *minishell, char *arg_name);
 int	executing_error(t_shell *minishell);
 int	pid_error(t_shell *minishell);
 
-/** `garbage_collector.c */
-void	garbage_collector2(t_shell *minishell);
-void	garbage_collector(t_shell *minishell);
+
 
 /** minishell_export_u.c */
 t_envp	*fullfill_env(t_envp *env);

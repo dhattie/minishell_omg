@@ -62,9 +62,9 @@ void	computing_exit_status(t_shell *minishell)
 
     waitpid(-1, &ret, 0);
     if WIFSIGNALED(ret)
-    minishell->child_exit_status = WTERMSIG(ret) + 128;
+    	minishell->child_exit_status = WTERMSIG(ret) + 128;
     else
-    minishell->child_exit_status = WEXITSTATUS(ret);
+    	minishell->child_exit_status = WEXITSTATUS(ret);
 }
 
 void	heredoc_free(t_shell *minishell)
